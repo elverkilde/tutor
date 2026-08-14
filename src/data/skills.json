@@ -1,0 +1,338 @@
+[
+  {
+    "id": "subitize-1-3",
+    "domain": "subitizing",
+    "titleDa": "Se antal 1-3 med det samme",
+    "cra": "representational",
+    "prereqs": [],
+    "review": true,
+    "templates": [
+      { "templateId": "numeral-match", "params": { "range": [1, 3], "choices": 2 } }
+    ]
+  },
+  {
+    "id": "subitize-compare-1-4",
+    "domain": "subitizing",
+    "titleDa": "Se hurtigt: hvilken bunke er størst 1-4",
+    "cra": "representational",
+    "prereqs": ["subitize-1-3"],
+    "review": true,
+    "templates": [
+      { "templateId": "tap-more", "params": { "range": [1, 4], "minGap": 1 } }
+    ]
+  },
+
+  {
+    "id": "count-1-5",
+    "domain": "counting",
+    "titleDa": "Tæl og hent 1-5 blokke",
+    "cra": "concrete",
+    "prereqs": ["subitize-1-3"],
+    "review": true,
+    "templates": [
+      { "templateId": "drag-to-chest", "params": { "range": [2, 5] } }
+    ]
+  },
+  {
+    "id": "count-1-10",
+    "domain": "counting",
+    "titleDa": "Tæl og hent 5-10 blokke",
+    "cra": "concrete",
+    "prereqs": ["count-1-5"],
+    "review": true,
+    "templates": [
+      { "templateId": "drag-to-chest", "params": { "range": [5, 10] } }
+    ]
+  },
+  {
+    "id": "tower-3-6",
+    "domain": "counting",
+    "titleDa": "Byg et tårn med 3-6 blokke",
+    "cra": "concrete",
+    "prereqs": ["count-1-5"],
+    "review": true,
+    "templates": [
+      { "templateId": "tower-build", "params": { "range": [3, 6] } }
+    ]
+  },
+  {
+    "id": "tower-5-10",
+    "domain": "counting",
+    "titleDa": "Byg et tårn med 5-10 blokke",
+    "cra": "concrete",
+    "prereqs": ["tower-3-6", "count-1-10"],
+    "review": true,
+    "templates": [
+      { "templateId": "tower-build", "params": { "range": [5, 10] } }
+    ]
+  },
+  {
+    "id": "count-10-15",
+    "domain": "counting",
+    "titleDa": "Tæl og hent 10-15 blokke",
+    "cra": "concrete",
+    "prereqs": ["count-1-10"],
+    "review": true,
+    "templates": [
+      { "templateId": "drag-to-chest", "params": { "range": [10, 15] } }
+    ]
+  },
+
+  {
+    "id": "numeral-match-1-5",
+    "domain": "numeral",
+    "titleDa": "Match tal og antal 1-5",
+    "cra": "abstract",
+    "prereqs": ["subitize-1-3"],
+    "review": true,
+    "templates": [
+      { "templateId": "numeral-match", "params": { "range": [1, 5], "choices": 3 } }
+    ]
+  },
+  {
+    "id": "numeral-match-1-10",
+    "domain": "numeral",
+    "titleDa": "Match tal og antal 1-10",
+    "cra": "abstract",
+    "prereqs": ["numeral-match-1-5", "count-1-10"],
+    "review": true,
+    "templates": [
+      { "templateId": "numeral-match", "params": { "range": [1, 10], "choices": 3 } }
+    ]
+  },
+  {
+    "id": "numeral-match-10-15",
+    "domain": "numeral",
+    "titleDa": "Match tal og antal 10-15",
+    "cra": "abstract",
+    "prereqs": ["numeral-match-1-10", "count-10-15"],
+    "review": true,
+    "templates": [
+      { "templateId": "numeral-match", "params": { "range": [10, 15], "choices": 3 } }
+    ]
+  },
+  {
+    "id": "numeral-produce-1-10",
+    "domain": "numeral",
+    "titleDa": "Læg antal efter tallet på skiltet",
+    "cra": "abstract",
+    "prereqs": ["numeral-match-1-10"],
+    "review": true,
+    "templates": [
+      { "templateId": "drag-to-chest", "params": { "range": [3, 10], "silent": true } }
+    ]
+  },
+
+  {
+    "id": "compare-1-5",
+    "domain": "magnitude",
+    "titleDa": "Flest blokke 1-5",
+    "cra": "representational",
+    "prereqs": ["subitize-1-3"],
+    "review": true,
+    "templates": [
+      { "templateId": "tap-more", "params": { "range": [1, 5], "minGap": 2 } }
+    ]
+  },
+  {
+    "id": "compare-1-10",
+    "domain": "magnitude",
+    "titleDa": "Flest blokke 2-10",
+    "cra": "representational",
+    "prereqs": ["compare-1-5"],
+    "review": true,
+    "templates": [
+      { "templateId": "tap-more", "params": { "range": [2, 10], "minGap": 2 } }
+    ]
+  },
+  {
+    "id": "compare-digits-1-5",
+    "domain": "magnitude",
+    "titleDa": "Største tal 1-5",
+    "cra": "abstract",
+    "prereqs": ["compare-1-5", "numeral-match-1-5"],
+    "review": true,
+    "templates": [
+      { "templateId": "tap-more", "params": { "range": [1, 5], "minGap": 1, "asDigits": true } }
+    ]
+  },
+  {
+    "id": "compare-digits-1-10",
+    "domain": "magnitude",
+    "titleDa": "Største tal 1-10",
+    "cra": "abstract",
+    "prereqs": ["compare-digits-1-5", "numeral-match-1-10"],
+    "review": true,
+    "templates": [
+      { "templateId": "tap-more", "params": { "range": [1, 10], "minGap": 2, "asDigits": true } }
+    ]
+  },
+
+  {
+    "id": "line-goto-1-5",
+    "domain": "ordering",
+    "titleDa": "Find tallet på tallinjen 1-5",
+    "cra": "representational",
+    "prereqs": ["numeral-match-1-5"],
+    "review": true,
+    "templates": [
+      { "templateId": "number-line-hop", "params": { "range": [1, 5], "mode": "goto", "lineMax": 5 } }
+    ]
+  },
+  {
+    "id": "line-goto-1-10",
+    "domain": "ordering",
+    "titleDa": "Find tallet på tallinjen 1-10",
+    "cra": "representational",
+    "prereqs": ["line-goto-1-5", "numeral-match-1-10"],
+    "review": true,
+    "templates": [
+      { "templateId": "number-line-hop", "params": { "range": [1, 10], "mode": "goto", "lineMax": 10 } }
+    ]
+  },
+  {
+    "id": "line-after-1-9",
+    "domain": "ordering",
+    "titleDa": "Tallet lige efter",
+    "cra": "abstract",
+    "prereqs": ["line-goto-1-10"],
+    "review": true,
+    "templates": [
+      { "templateId": "number-line-hop", "params": { "range": [1, 9], "mode": "after", "lineMax": 10 } }
+    ]
+  },
+  {
+    "id": "line-before-2-10",
+    "domain": "ordering",
+    "titleDa": "Tallet lige før",
+    "cra": "abstract",
+    "prereqs": ["line-after-1-9"],
+    "review": true,
+    "templates": [
+      { "templateId": "number-line-hop", "params": { "range": [2, 10], "mode": "before", "lineMax": 10 } }
+    ]
+  },
+
+  {
+    "id": "add-combine-to-5",
+    "domain": "addsub",
+    "titleDa": "Læg sammen med blokke, op til 5",
+    "cra": "concrete",
+    "prereqs": ["count-1-5", "numeral-match-1-5"],
+    "review": true,
+    "templates": [
+      { "templateId": "combine-count", "params": { "maxSum": 5 } }
+    ]
+  },
+  {
+    "id": "add-combine-to-10",
+    "domain": "addsub",
+    "titleDa": "Læg sammen med blokke, op til 10",
+    "cra": "concrete",
+    "prereqs": ["add-combine-to-5", "numeral-match-1-10"],
+    "review": true,
+    "templates": [
+      { "templateId": "combine-count", "params": { "maxSum": 10 } }
+    ]
+  },
+  {
+    "id": "sub-take-to-5",
+    "domain": "addsub",
+    "titleDa": "Træk fra med blokke, op til 5",
+    "cra": "concrete",
+    "prereqs": ["add-combine-to-5"],
+    "review": true,
+    "templates": [
+      { "templateId": "take-away", "params": { "maxStart": 5 } }
+    ]
+  },
+  {
+    "id": "sub-take-to-10",
+    "domain": "addsub",
+    "titleDa": "Træk fra med blokke, op til 10",
+    "cra": "concrete",
+    "prereqs": ["sub-take-to-5", "add-combine-to-10"],
+    "review": true,
+    "templates": [
+      { "templateId": "take-away", "params": { "maxStart": 10 } }
+    ]
+  },
+  {
+    "id": "add-equation-to-5",
+    "domain": "addsub",
+    "titleDa": "Plus med tal, op til 5",
+    "cra": "abstract",
+    "prereqs": ["add-combine-to-5"],
+    "review": true,
+    "templates": [
+      { "templateId": "equation", "params": { "op": "plus", "max": 5 } }
+    ]
+  },
+  {
+    "id": "add-equation-to-10",
+    "domain": "addsub",
+    "titleDa": "Plus med tal, op til 10",
+    "cra": "abstract",
+    "prereqs": ["add-equation-to-5", "add-combine-to-10"],
+    "review": true,
+    "templates": [
+      { "templateId": "equation", "params": { "op": "plus", "max": 10 } }
+    ]
+  },
+  {
+    "id": "sub-equation-to-10",
+    "domain": "addsub",
+    "titleDa": "Minus med tal, op til 10",
+    "cra": "abstract",
+    "prereqs": ["sub-take-to-10", "add-equation-to-5"],
+    "review": true,
+    "templates": [
+      { "templateId": "equation", "params": { "op": "minus", "max": 10 } }
+    ]
+  },
+
+  {
+    "id": "pattern-ab",
+    "domain": "patterns",
+    "titleDa": "Mønster: to blokke skiftevis",
+    "cra": "representational",
+    "prereqs": [],
+    "review": true,
+    "templates": [
+      { "templateId": "pattern-continue", "params": { "pattern": "ab" } }
+    ]
+  },
+  {
+    "id": "pattern-abc",
+    "domain": "patterns",
+    "titleDa": "Mønster: tre blokke i rækkefølge",
+    "cra": "representational",
+    "prereqs": ["pattern-ab"],
+    "review": true,
+    "templates": [
+      { "templateId": "pattern-continue", "params": { "pattern": "abc" } }
+    ]
+  },
+  {
+    "id": "pattern-aabb",
+    "domain": "patterns",
+    "titleDa": "Mønster: to og to",
+    "cra": "representational",
+    "prereqs": ["pattern-ab"],
+    "review": true,
+    "templates": [
+      { "templateId": "pattern-continue", "params": { "pattern": "aabb" } }
+    ]
+  },
+  {
+    "id": "pattern-mixed",
+    "domain": "patterns",
+    "titleDa": "Svære mønstre",
+    "cra": "representational",
+    "prereqs": ["pattern-abc", "pattern-aabb"],
+    "review": true,
+    "templates": [
+      { "templateId": "pattern-continue", "params": { "pattern": "mixed" } }
+    ]
+  }
+]

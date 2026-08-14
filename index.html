@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="da">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#cfe6f2" />
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" href="icons/icon-192.png" />
+    <title>Byg &amp; Tæl</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      // Debug-only, for testing on devices with no attached console (iPad):
+      // open with ?debug to see any JS error on screen instead of a blank page.
+      if (location.search.indexOf('debug') !== -1) {
+        (function () {
+          function show(msg) {
+            var el = document.getElementById('boot-err')
+            if (!el) {
+              el = document.createElement('pre')
+              el.id = 'boot-err'
+              el.style.cssText =
+                'position:fixed;bottom:0;left:0;right:0;max-height:45%;overflow:auto;' +
+                'background:#fff;color:#b00;font-size:12px;padding:8px;z-index:9999;' +
+                'white-space:pre-wrap;margin:0;border-top:2px solid #b00'
+              document.body.appendChild(el)
+            }
+            el.textContent += msg + '\n'
+          }
+          window.addEventListener('error', function (e) {
+            show('ERR: ' + e.message + ' @ ' + (e.filename || '') + ':' + (e.lineno || ''))
+          })
+          window.addEventListener('unhandledrejection', function (e) {
+            show('REJ: ' + ((e.reason && (e.reason.stack || e.reason.message)) || e.reason))
+          })
+        })()
+      }
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

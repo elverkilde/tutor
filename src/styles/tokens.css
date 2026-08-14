@@ -1,0 +1,37 @@
+:root {
+  /* Calm, Minecraft-inspired palette — muted so nothing screams */
+  --sky: #cfe6f2;
+  --sky-deep: #a8cfe3;
+  --grass: #7cb268;
+  --grass-dark: #5d9a4c;
+  --dirt: #9c7450;
+  --dirt-dark: #7d5b3e;
+  --stone: #9aa0a3;
+  --wood: #b08d57;
+  --gold: #e3c04b;
+  --diamond: #7fd6d0;
+
+  --ink: #2e3a3f;
+  --ink-soft: #5b6a70;
+  --paper: #fbf9f4;
+  --card: #ffffff;
+
+  --good: #6fbf73;
+  --focus: #4a90d9;
+
+  --radius: 20px;
+  --shadow: 0 3px 0 rgba(46, 58, 63, 0.15);
+
+  /* Animation intensity: adult settings can dial this down to 0 */
+  --anim-scale: 1;
+  --anim-fast: calc(150ms * var(--anim-scale));
+  --anim-slow: calc(400ms * var(--anim-scale));
+
+  --tap-target: 72px; /* minimum touch target size */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --anim-scale: 0;
+  }
+}
