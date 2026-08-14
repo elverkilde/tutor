@@ -14,6 +14,11 @@ import type { TaskTemplate, TemplateProps, TrialSpec } from '../types'
  * picture he decodes. The two block types stay distinct inside the chest, so
  * the addends remain visible inside the sum. Digit choices only appear once
  * everything is gathered: act first, then name the total.
+ *
+ * Concreteness fading: the symbols narrate the action instead of replacing
+ * it. Each tray wears its numeral from the start; the moment gathering
+ * completes, the expression banner appears ("3 + 4 = ?") and the app asks it
+ * aloud — naming what he just did — and a correct answer fills the banner in.
  */
 export interface GatherSumData {
   a: number
@@ -85,11 +90,24 @@ function View({ spec, scaffoldLevel, speak, onResponse, onDemoFinished }: Templa
       }
       if (!alive.current) return
       setDemoDigit(answer)
-      await sleep(1500)
+      await speak({ key: 'plusIs', n: a, n2: b })
+      await sleep(1200)
       if (!alive.current) return
       onDemoFinished()
     })()
   }, [demoing])
+
+  // The linking moment: everything just got joined — name it in symbols.
+  const spokeExpression = useRef(false)
+  useEffect(() => {
+    if (!complete) {
+      spokeExpression.current = false
+      return
+    }
+    if (demoing || spokeExpression.current) return
+    spokeExpression.current = true
+    void speak({ key: 'plusEquation', n: a, n2: b })
+  }, [complete, demoing])
 
   const insideChest = (x: number, y: number) => {
     const r = chestRef.current?.getBoundingClientRect()
@@ -158,6 +176,7 @@ function View({ spec, scaffoldLevel, speak, onResponse, onDemoFinished }: Templa
       data-testid={testid}
       style={{
         flex: 1,
+        position: 'relative',
         background: 'var(--card)',
         borderRadius: 'var(--radius)',
         boxShadow: 'var(--shadow)',
@@ -169,6 +188,7 @@ function View({ spec, scaffoldLevel, speak, onResponse, onDemoFinished }: Templa
         alignContent: 'center',
       }}
     >
+      <TargetSign value={count} />
       {Array.from({ length: count }, (_, i) => {
         const key = `${prefix}${i}`
         return (
@@ -187,10 +207,12 @@ function View({ spec, scaffoldLevel, speak, onResponse, onDemoFinished }: Templa
     </div>
   )
 
+  const revealed = demoDigit !== null || picked === answer
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '14px' }}>
-      {/* The two sets to join */}
-      <div style={{ flex: 1, display: 'flex', gap: '16px', alignItems: 'stretch' }}>
+      {/* The two sets to join — each tray wears its numeral (room for the signs above) */}
+      <div style={{ flex: 1, display: 'flex', gap: '16px', alignItems: 'stretch', marginTop: '20px' }}>
         {tray('tray-a', a, typeA, 'a')}
         {tray('tray-b', b, typeB, 'b')}
       </div>
@@ -255,6 +277,36 @@ function View({ spec, scaffoldLevel, speak, onResponse, onDemoFinished }: Templa
             </div>
           )
         })}
+      </div>
+
+      {/* The expression assembles the moment the joining is done: "3 + 4 = ?" */}
+      <div style={{ minHeight: '58px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        {complete && (
+          <div
+            data-testid="expression"
+            style={{
+              display: 'flex',
+              gap: '16px',
+              alignItems: 'center',
+              background: 'var(--card)',
+              borderRadius: 'var(--radius)',
+              boxShadow: 'var(--shadow)',
+              padding: '2px 26px',
+              fontSize: '2.4rem',
+              fontWeight: 800,
+              color: 'var(--ink)',
+              animation: 'pop-in var(--anim-fast) ease-out',
+            }}
+          >
+            <span>{a}</span>
+            <span style={{ color: 'var(--ink-soft)' }}>+</span>
+            <span>{b}</span>
+            <span style={{ color: 'var(--ink-soft)' }}>=</span>
+            <span style={{ color: revealed ? 'var(--good)' : 'var(--ink-soft)' }}>
+              {revealed ? answer : '?'}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* The answer row appears once everything is gathered: act, then name */}

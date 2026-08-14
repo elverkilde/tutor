@@ -61,6 +61,7 @@ export const phrases = {
   takeAway: (n = 0, n2 = 0) =>
     `Der er ${blokke(n)}. ${daNumber(n2)} hopper væk. Hvor mange er der tilbage?`,
   plusEquation: (n = 0, n2 = 0) => `Hvor meget er ${daNumber(n)} plus ${daNumber(n2)}?`,
+  plusIs: (n = 0, n2 = 0) => `${daNumber(n)} plus ${daNumber(n2)} er ${daNumber(n + n2)}`,
   minusEquation: (n = 0, n2 = 0) => `Hvor meget er ${daNumber(n)} minus ${daNumber(n2)}?`,
   missingPlus: (n = 0, n2 = 0) => `${daNumber(n)} plus hvad giver ${daNumber(n2)}?`,
   worldBigger: () => 'Din verden er vokset! Der er mere plads at bygge på',
