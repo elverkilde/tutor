@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'preact/hooks'
 import skillsJson from '../data/skills.json'
 import { deriveStatus } from '../engine/mastery'
-import { PROBE_CAP } from '../engine/placement'
+import { effectiveMastery } from '../engine/placement'
 import type { Domain, MasteryStatus, Skill, Trial } from '../engine/types'
 import { loadActiveTrials, profile } from '../state/store'
+import { buildSuggestions } from './suggestions'
 
 const skills = skillsJson as Skill[]
 
@@ -83,6 +84,7 @@ function WindowDots({ skillId }: { skillId: string }) {
 
 export function Overview() {
   const p = profile.value!
+  const mastery = effectiveMastery(p.mastery, p.placement, new Date().toISOString())
   const [sessions, setSessions] = useState<SessionSummary[] | null>(null)
   useEffect(() => {
     void loadActiveTrials().then((ts) => setSessions(summarize(ts)))
@@ -92,7 +94,7 @@ export function Overview() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      {/* Placement status */}
+      {/* What deserves attention right now */}
       <div
         style={{
           background: 'var(--card)',
@@ -101,18 +103,24 @@ export function Overview() {
           boxShadow: 'var(--shadow)',
         }}
       >
-        {p.placement && !p.placement.done ? (
-          <span>
-            <strong>Placement in progress</strong> — probing <em>{p.placement.currentDomain}</em>,{' '}
-            {p.placement.probesUsed}/{PROBE_CAP} probes used. Item choice is driven by the
-            assessment until it converges; the child sees normal play.
-          </span>
-        ) : (
-          <span>
-            <strong>Placement complete</strong> — items are now chosen by mastery (~80% at his
-            frontier, ~20% review).
-          </span>
-        )}
+        <h3 style={{ marginBottom: '8px' }}>Suggested focus</h3>
+        {(() => {
+          const suggestions = buildSuggestions(skills, mastery, p.placement, new Date().toISOString())
+          if (suggestions.length === 0) {
+            return (
+              <div style={{ color: 'var(--ink-soft)' }}>
+                Nothing urgent — placement is done and practice is balanced. Keep sessions going.
+              </div>
+            )
+          }
+          return (
+            <ul style={{ paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              {suggestions.map((s) => (
+                <li key={s.kind}>{s.text}</li>
+              ))}
+            </ul>
+          )
+        })()}
       </div>
 
       {/* Skills by domain */}
@@ -126,7 +134,7 @@ export function Overview() {
             {skills
               .filter((s) => s.domain === d)
               .map((s) => {
-                const status = deriveStatus(s, p.mastery)
+                const status = deriveStatus(s, mastery)
                 const st = STATUS_STYLE[status]
                 return (
                   <div

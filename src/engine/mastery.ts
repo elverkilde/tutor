@@ -48,6 +48,9 @@ export function deriveStatus(
 ): MasteryStatus {
   const state = mastery[skill.id]
   if (isMastered(state)) return 'mastered'
+  // Attempted beats locked: placement probes skills ahead of their formal
+  // prerequisites, and "locked" would misdescribe something he's played.
+  if (state && state.window.length > 0) return 'practicing'
   if (!skill.prereqs.every((p) => isMastered(mastery[p]))) return 'locked'
-  return state && state.window.length > 0 ? 'practicing' : 'frontier'
+  return 'frontier'
 }

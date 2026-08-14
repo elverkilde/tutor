@@ -19,7 +19,7 @@ export const PROBE_CAP = 24
 
 // Patterns early: often a relative strength for autistic children — early
 // wins during placement buy engagement for the harder domains after.
-const DOMAIN_ORDER: Domain[] = [
+export const DOMAIN_ORDER: Domain[] = [
   'subitizing',
   'patterns',
   'counting',
@@ -130,6 +130,20 @@ export function applyProbeResult(
 
   if (p.probesUsed >= PROBE_CAP) p = { ...p, done: true }
   return p
+}
+
+/**
+ * The mastery map as the dashboard should read it: during an active
+ * placement, provisionally mastered rungs count as mastered (they were
+ * passed twice — the seeding at finalize is a formality).
+ */
+export function effectiveMastery(
+  mastery: Record<string, MasteryState>,
+  placement: PlacementState | null | undefined,
+  now: string,
+): Record<string, MasteryState> {
+  if (!placement || placement.done) return mastery
+  return seedMastery(mastery, placement, now)
 }
 
 /** Fold provisional masteries into the mastery map (never downgrades). */

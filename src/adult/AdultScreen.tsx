@@ -1,10 +1,20 @@
 import { useState } from 'preact/hooks'
 import { Overview } from './Overview'
 import { Settings } from './Settings'
+import { SkillMap } from './SkillMap'
+import { Trends } from './Trends'
+
+const TABS = [
+  ['overview', 'Overview'],
+  ['map', 'Skill map'],
+  ['trends', 'Trends'],
+  ['settings', 'Settings'],
+] as const
+type Tab = (typeof TABS)[number][0]
 
 /** The adult-facing area: dashboard + settings. English on purpose — it's for the tutor. */
 export function AdultScreen({ onClose }: { onClose: () => void }) {
-  const [tab, setTab] = useState<'overview' | 'settings'>('overview')
+  const [tab, setTab] = useState<Tab>('overview')
 
   return (
     <div
@@ -24,19 +34,19 @@ export function AdultScreen({ onClose }: { onClose: () => void }) {
           borderBottom: '1px solid rgba(46,58,63,0.12)',
         }}
       >
-        {(['overview', 'settings'] as const).map((t) => (
+        {TABS.map(([id, label]) => (
           <button
-            key={t}
-            onClick={() => setTab(t)}
+            key={id}
+            onClick={() => setTab(id)}
             style={{
               padding: '8px 16px',
               borderRadius: '10px',
               fontWeight: 600,
-              background: tab === t ? 'var(--ink)' : 'transparent',
-              color: tab === t ? 'white' : 'var(--ink)',
+              background: tab === id ? 'var(--ink)' : 'transparent',
+              color: tab === id ? 'white' : 'var(--ink)',
             }}
           >
-            {t === 'overview' ? 'Overview' : 'Settings'}
+            {label}
           </button>
         ))}
         <div style={{ flex: 1 }} />
@@ -49,7 +59,10 @@ export function AdultScreen({ onClose }: { onClose: () => void }) {
         </button>
       </div>
       <div style={{ flex: 1, overflowY: 'auto', padding: '16px', WebkitOverflowScrolling: 'touch' }}>
-        {tab === 'overview' ? <Overview /> : <Settings onProfileReset={onClose} />}
+        {tab === 'overview' && <Overview />}
+        {tab === 'map' && <SkillMap />}
+        {tab === 'trends' && <Trends />}
+        {tab === 'settings' && <Settings onProfileReset={onClose} />}
       </div>
     </div>
   )
