@@ -10,6 +10,13 @@ export interface NumeralMatchData {
   count: number
   choices: number[]
   blockType: string
+  /**
+   * Teen mode: taps count aloud cumulatively instead of toggling silent dots.
+   * For 1-10 the spoken count would hand over an answer he should produce
+   * himself; for 11-20 hearing the sequence IS the training (spoken "sytten"
+   * -> written 17 is the mapping being built).
+   */
+  countAloud: boolean
 }
 
 const BLOCK_CHOICES = ['grass', 'stone', 'wood', 'dirt']
@@ -35,14 +42,15 @@ function generateTrial(
     if (c >= lo && c <= max && c !== count) distractors.add(c)
   }
   const choices = rng.shuffle([count, ...distractors])
+  const countAloud = params['countAloud'] === true
 
   return {
     templateId: 'numeral-match',
     skillId,
     params,
     seed,
-    promptPhrase: { key: 'numeralMatch' },
-    data: { count, choices, blockType: rng.pick(BLOCK_CHOICES) },
+    promptPhrase: { key: countAloud ? 'numeralCount' : 'numeralMatch' },
+    data: { count, choices, blockType: rng.pick(BLOCK_CHOICES), countAloud },
   }
 }
 
@@ -61,7 +69,7 @@ function applyScaffold(
 }
 
 function View({ spec, scaffoldLevel, speak, onResponse, onDemoFinished }: TemplateProps<NumeralMatchData>) {
-  const { count, choices, blockType } = spec.data
+  const { count, choices, blockType, countAloud } = spec.data
   const [picked, setPicked] = useState<number | null>(null)
   const [countedUpTo, setCountedUpTo] = useState(-1)
   const [demoDigit, setDemoDigit] = useState<number | null>(null)
@@ -74,6 +82,19 @@ function View({ spec, scaffoldLevel, speak, onResponse, onDemoFinished }: Templa
       if (next.has(i)) next.delete(i)
       else next.add(i)
       return next
+    })
+  // countAloud: taps count in order and the app says the running count —
+  // tapping an already-counted block restarts the count from it (same
+  // ritual as the chest games). Dots only, never numerals.
+  const [countedOrder, setCountedOrder] = useState<number[]>([])
+  const tapCount = (i: number) =>
+    setCountedOrder((prev) => {
+      if (prev.includes(i)) {
+        void speak({ key: 'number', n: 1 })
+        return [i]
+      }
+      void speak({ key: 'number', n: prev.length + 1 })
+      return [...prev, i]
     })
   const alive = useRef(true)
   useEffect(() => () => void (alive.current = false), [])
@@ -129,9 +150,15 @@ function View({ spec, scaffoldLevel, speak, onResponse, onDemoFinished }: Templa
           count={count}
           type={blockType}
           size={52}
-          highlightIndex={countedUpTo}
-          marks={marks}
-          onTapBlock={toggleMark}
+          highlightIndex={
+            scaffoldLevel === 2
+              ? countedUpTo
+              : countAloud
+                ? (countedOrder[countedOrder.length - 1] ?? -1)
+                : -1
+          }
+          marks={countAloud ? new Set(countedOrder) : marks}
+          onTapBlock={countAloud ? tapCount : toggleMark}
         />
       </div>
       <div style={{ display: 'flex', gap: '20px', justifyContent: 'center' }}>

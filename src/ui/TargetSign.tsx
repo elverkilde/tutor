@@ -1,5 +1,5 @@
-/** The wooden sign showing the target numeral (used by chest and tower). */
-export function TargetSign({ value }: { value: number }) {
+/** The wooden sign showing the target numeral (used by chest and tower); '?' for an unknown total. */
+export function TargetSign({ value }: { value: number | string }) {
   return (
     <div
       data-testid="target"

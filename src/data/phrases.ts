@@ -42,12 +42,20 @@ export const phrases = {
   dragToChest: (n = 0) => `Træk ${blokke(n)} hen til kisten`,
   dragToChestSign: () => 'Læg lige så mange blokke i kisten, som tallet viser',
   numeralMatch: () => 'Hvor mange blokke er der? Tryk på tallet',
+  // "blokke" deliberately avoided: a ten-rod is one draggable thing, and he
+  // takes spoken words literally — this phrasing never implies 17 drags.
+  tensChest: (n = 0) => `Læg ${daNumber(n)} i kisten`,
+  numeralCount: () => 'Tæl blokkene, og tryk så på tallet',
   buildTower: (n = 0) => `Byg et tårn med ${blokke(n)}`,
   lineGoto: (n = 0) => `Hop hen til tallet ${daNumber(n)}`,
   lineAfter: (n = 0) => `Tryk på tallet, der kommer lige efter ${daNumber(n)}`,
   lineBefore: (n = 0) => `Tryk på tallet, der kommer lige før ${daNumber(n)}`,
   patternNext: () => 'Hvilken blok kommer nu? Fortsæt mønsteret',
   combineCount: () => 'Hvor mange blokke er der i alt? Tryk på tallet',
+  gatherSum: () => 'Saml alle blokkene i kisten. Hvor mange er der i alt?',
+  // "gange" (times), not "hop": "hop tre hop" reads as a rule he can't parse.
+  lineAdd: (n = 0, n2 = 0) =>
+    `Du står på ${daNumber(n)}. Hop ${n2 === 1 ? 'en gang' : `${daNumber(n2)} gange`} frem`,
   takeAway: (n = 0, n2 = 0) =>
     `Der er ${blokke(n)}. ${daNumber(n2)} hopper væk. Hvor mange er der tilbage?`,
   plusEquation: (n = 0, n2 = 0) => `Hvor meget er ${daNumber(n)} plus ${daNumber(n2)}?`,

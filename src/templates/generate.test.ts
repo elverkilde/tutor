@@ -5,7 +5,10 @@ import { tapMore } from './tap-more'
 import { dragToChest } from './drag-to-chest'
 import { numeralMatch } from './numeral-match'
 import { towerBuild } from './tower-build'
+import { tensAndOnes } from './tens-and-ones'
 import { numberLineHop } from './number-line-hop'
+import { lineAdd } from './line-add'
+import { gatherSum } from './gather-sum'
 import { patternContinue } from './pattern-continue'
 import { combineCount } from './combine-count'
 import { takeAway } from './take-away'
@@ -81,6 +84,51 @@ describe('numeral-match generation', () => {
     expect(scaffolded.data.choices).toHaveLength(2)
     expect(scaffolded.data.choices).toContain(spec.data.count)
   })
+
+  it('teen bindings count aloud and use the counting prompt', () => {
+    const aloud = bindingsFor('numeral-match').filter((x) => x.params['countAloud'] === true)
+    expect(aloud.length).toBeGreaterThan(0)
+    for (const b of aloud) {
+      const spec = numeralMatch.generateTrial(b.skill.id, b.params, 5)
+      expect(spec.data.countAloud).toBe(true)
+      expect(spec.promptPhrase.key).toBe('numeralCount')
+    }
+    const silent = bindingsFor('numeral-match').find((x) => x.params['countAloud'] !== true)!
+    const spec = numeralMatch.generateTrial(silent.skill.id, silent.params, 5)
+    expect(spec.data.countAloud).toBe(false)
+    expect(spec.promptPhrase.key).toBe('numeralMatch')
+  })
+})
+
+describe('tens-and-ones generation', () => {
+  it('decomposes the target into rods and ones; spares exist; a rod is always required', () => {
+    for (const b of bindingsFor('tens-and-ones')) {
+      const [min, max] = b.params['range'] as number[]
+      for (let seed = 1; seed <= SEEDS; seed++) {
+        const spec = tensAndOnes.generateTrial(b.skill.id, b.params, seed)
+        const { target, tens, ones, rodsAvailable, singlesAvailable } = spec.data
+        expect(target).toBeGreaterThanOrEqual(min)
+        expect(target).toBeLessThanOrEqual(max)
+        expect(tens * 10 + ones).toBe(target)
+        expect(tens).toBeGreaterThanOrEqual(1)
+        expect(rodsAvailable).toBeGreaterThanOrEqual(tens)
+        // Spare singles exist, but never enough to reach the target without a rod.
+        expect(singlesAvailable).toBeGreaterThan(ones)
+        expect(singlesAvailable).toBeLessThan(target)
+        expect(spec.promptPhrase.n).toBe(target)
+      }
+    }
+  })
+
+  it('scaffold shows the decomposition slots without changing quantities', () => {
+    const b = bindingsFor('tens-and-ones')[0]
+    const spec = tensAndOnes.generateTrial(b.skill.id, b.params, 21)
+    const scaffolded = tensAndOnes.applyScaffold(spec, 1)
+    expect(scaffolded.data.showSlots).toBe(true)
+    expect(scaffolded.data.target).toBe(spec.data.target)
+    expect(scaffolded.data.tens).toBe(spec.data.tens)
+    expect(scaffolded.data.ones).toBe(spec.data.ones)
+  })
 })
 
 describe('drag-to-chest generation', () => {
@@ -143,6 +191,36 @@ describe('number-line-hop generation', () => {
   })
 })
 
+describe('line-add generation', () => {
+  it('start, hops and landing all stay on the line', () => {
+    for (const b of bindingsFor('line-add')) {
+      const lineMax = b.params['lineMax'] as number
+      const maxHops = b.params['maxHops'] as number
+      for (let seed = 1; seed <= SEEDS; seed++) {
+        const spec = lineAdd.generateTrial(b.skill.id, b.params, seed)
+        const { line, start, hops, answer } = spec.data
+        expect(start).toBeGreaterThanOrEqual(1)
+        expect(hops).toBeGreaterThanOrEqual(1)
+        expect(hops).toBeLessThanOrEqual(maxHops)
+        expect(answer).toBe(start + hops)
+        expect(answer).toBeLessThanOrEqual(lineMax)
+        expect(line).toContain(answer)
+        expect(spec.promptPhrase.n).toBe(start)
+        expect(spec.promptPhrase.n2).toBe(hops)
+      }
+    }
+  })
+
+  it('scaffold shows the hop path without changing the numbers', () => {
+    const b = bindingsFor('line-add')[0]
+    const spec = lineAdd.generateTrial(b.skill.id, b.params, 17)
+    const scaffolded = lineAdd.applyScaffold(spec, 1)
+    expect(scaffolded.data.showPath).toBe(true)
+    expect(scaffolded.data.start).toBe(spec.data.start)
+    expect(scaffolded.data.hops).toBe(spec.data.hops)
+  })
+})
+
 describe('pattern-continue generation', () => {
   it('the sequence truly repeats its unit and the answer continues it', () => {
     for (const b of bindingsFor('pattern-continue')) {
@@ -162,6 +240,31 @@ describe('pattern-continue generation', () => {
 })
 
 describe('addsub generation', () => {
+  it('gather-sum addends are positive, distinct in type, and within maxSum', () => {
+    for (const b of bindingsFor('gather-sum')) {
+      const maxSum = b.params['maxSum'] as number
+      for (let seed = 1; seed <= SEEDS; seed++) {
+        const spec = gatherSum.generateTrial(b.skill.id, b.params, seed)
+        const { a, b: bb, typeA, typeB, answer, choices } = spec.data
+        expect(a).toBeGreaterThanOrEqual(1)
+        expect(bb).toBeGreaterThanOrEqual(1)
+        expect(a + bb).toBe(answer)
+        expect(answer).toBeLessThanOrEqual(maxSum)
+        expect(typeA).not.toBe(typeB)
+        expect(choices).toContain(answer)
+        expect(new Set(choices).size).toBe(choices.length)
+      }
+    }
+  })
+
+  it('gather-sum scaffold reduces to two choices and keeps the answer', () => {
+    const b = bindingsFor('gather-sum')[0]
+    const spec = gatherSum.generateTrial(b.skill.id, b.params, 9)
+    const scaffolded = gatherSum.applyScaffold(spec, 1)
+    expect(scaffolded.data.choices).toHaveLength(2)
+    expect(scaffolded.data.choices).toContain(spec.data.answer)
+  })
+
   it('combine-count sums stay within maxSum and choices include the sum', () => {
     for (const b of bindingsFor('combine-count')) {
       const maxSum = b.params['maxSum'] as number

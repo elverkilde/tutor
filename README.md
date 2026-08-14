@@ -82,21 +82,26 @@ domain). Max 18 probes, then normal practice mode takes over. The child sees ord
 throughout — rewards flow regardless of correctness. The probe verdict is always the first,
 unscaffolded attempt.
 
-## The curriculum (M3)
+## The curriculum
 
-30 skills across 7 domains, each taught concrete → representational → abstract:
+36 skills across 7 domains, each taught concrete → representational → abstract:
 
 - **Subitizing**: instant amounts 1-3, quick comparison 1-4
-- **Counting**: fetch to the chest (1-5, 5-10, 10-15), build towers (3-6, 5-10)
-- **Digits ↔ quantities**: match digit to pile (1-5, 1-10, 10-15), produce from the sign alone
+- **Counting**: produce a quantity (1-5, 5-10) — chest-fetch and tower-build are two mechanics
+  for the *same* skill (the selector alternates them for variety); then "ten and some more"
+  (11-15, 16-20) with ten-rods, so 17 is one rod + seven singles, never seventeen drags
+- **Digits ↔ quantities**: match digit to pile (1-5, 1-10), count-aloud matching for the teens
+  (11-15, 16-20 — taps speak the running count), produce from the sign alone
 - **More/fewer**: compare piles (1-5, 1-10), then bare digits (1-5, 1-10)
 - **Ordering**: find numbers on the number line (1-5, 1-10), the number just after / just before
-- **Addition & subtraction**: combine piles → total; blocks hop away → how many left;
-  then bare equations (+ to 5, + to 10, − to 10)
+- **Addition & subtraction**: taught as an *action* first — gather two trays into the chest
+  and count the union (concrete); then combine piles → total (picture, + sign appears);
+  hop forward on the number line (counting on — taps are the hops); blocks hop away → how
+  many left; then bare equations (+ to 5, + to 10, − to 10, missing number)
 - **Patterns**: AB, ABC, AABB, mixed — a root skill on purpose (often a relative
   strength, gives early wins)
 
-Nine mini-game mechanics serve these skills; new block types (sand, leaves, brick, ice,
+Twelve mini-game mechanics serve these skills; new block types (sand, leaves, brick, ice,
 snow, emerald, obsidian, redstone) unlock as skills are mastered, so the reward world
 itself tracks his learning.
 

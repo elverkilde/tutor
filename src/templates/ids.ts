@@ -7,9 +7,12 @@ export const TEMPLATE_IDS = [
   'drag-to-chest',
   'numeral-match',
   'tower-build',
+  'tens-and-ones',
   'number-line-hop',
+  'line-add',
   'pattern-continue',
   'combine-count',
+  'gather-sum',
   'take-away',
   'equation',
 ] as const

@@ -4,7 +4,10 @@ import { tapMore } from './tap-more'
 import { dragToChest } from './drag-to-chest'
 import { numeralMatch } from './numeral-match'
 import { towerBuild } from './tower-build'
+import { tensAndOnes } from './tens-and-ones'
 import { numberLineHop } from './number-line-hop'
+import { lineAdd } from './line-add'
+import { gatherSum } from './gather-sum'
 import { patternContinue } from './pattern-continue'
 import { combineCount } from './combine-count'
 import { takeAway } from './take-away'
@@ -15,7 +18,10 @@ export const templates: Record<string, TaskTemplate<any>> = {
   'drag-to-chest': dragToChest,
   'numeral-match': numeralMatch,
   'tower-build': towerBuild,
+  'tens-and-ones': tensAndOnes,
   'number-line-hop': numberLineHop,
+  'line-add': lineAdd,
+  'gather-sum': gatherSum,
   'pattern-continue': patternContinue,
   'combine-count': combineCount,
   'take-away': takeAway,

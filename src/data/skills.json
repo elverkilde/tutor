@@ -25,67 +25,47 @@
   {
     "id": "count-1-5",
     "domain": "counting",
-    "titleDa": "Tæl og hent 1-5 blokke",
+    "titleDa": "Hent eller byg 1-5 blokke",
     "cra": "concrete",
     "prereqs": ["subitize-1-3"],
     "review": true,
     "templates": [
-      { "templateId": "drag-to-chest", "params": { "range": [2, 5] } }
+      { "templateId": "drag-to-chest", "params": { "range": [2, 5] } },
+      { "templateId": "tower-build", "params": { "range": [2, 5] } }
     ]
   },
   {
     "id": "count-1-10",
     "domain": "counting",
-    "titleDa": "Tæl og hent 5-10 blokke",
+    "titleDa": "Hent eller byg 5-10 blokke",
     "cra": "concrete",
     "prereqs": ["count-1-5"],
     "review": true,
     "templates": [
-      { "templateId": "drag-to-chest", "params": { "range": [5, 10] } }
-    ]
-  },
-  {
-    "id": "tower-3-6",
-    "domain": "counting",
-    "titleDa": "Byg et tårn med 3-6 blokke",
-    "cra": "concrete",
-    "prereqs": ["count-1-5"],
-    "review": true,
-    "templates": [
-      { "templateId": "tower-build", "params": { "range": [3, 6] } }
-    ]
-  },
-  {
-    "id": "tower-5-10",
-    "domain": "counting",
-    "titleDa": "Byg et tårn med 5-10 blokke",
-    "cra": "concrete",
-    "prereqs": ["tower-3-6", "count-1-10"],
-    "review": true,
-    "templates": [
+      { "templateId": "drag-to-chest", "params": { "range": [5, 10] } },
       { "templateId": "tower-build", "params": { "range": [5, 10] } }
     ]
   },
   {
-    "id": "count-10-15",
+    "id": "tens-ones-11-15",
     "domain": "counting",
-    "titleDa": "Tæl og hent 10-15 blokke",
+    "titleDa": "Ti og lidt til: læg 11-15 i kisten",
     "cra": "concrete",
     "prereqs": ["count-1-10"],
     "review": true,
     "templates": [
-      { "templateId": "drag-to-chest", "params": { "range": [10, 15] } }
+      { "templateId": "tens-and-ones", "params": { "range": [11, 15] } }
     ]
   },
   {
-    "id": "count-15-20",
+    "id": "tens-ones-16-20",
     "domain": "counting",
-    "titleDa": "Tæl og hent 15-20 blokke",
+    "titleDa": "Ti og lidt til: læg 16-20 i kisten",
     "cra": "concrete",
-    "prereqs": ["count-10-15"],
+    "prereqs": ["tens-ones-11-15"],
     "review": true,
     "templates": [
-      { "templateId": "drag-to-chest", "params": { "range": [15, 20] } }
+      { "templateId": "tens-and-ones", "params": { "range": [16, 20] } }
     ]
   },
 
@@ -112,25 +92,25 @@
     ]
   },
   {
-    "id": "numeral-match-10-15",
+    "id": "numeral-count-11-15",
     "domain": "numeral",
-    "titleDa": "Match tal og antal 10-15",
+    "titleDa": "Tæl og find tallet 11-15",
     "cra": "abstract",
-    "prereqs": ["numeral-match-1-10", "count-10-15"],
+    "prereqs": ["numeral-match-1-10", "tens-ones-11-15"],
     "review": true,
     "templates": [
-      { "templateId": "numeral-match", "params": { "range": [10, 15], "choices": 3 } }
+      { "templateId": "numeral-match", "params": { "range": [11, 15], "choices": 3, "countAloud": true } }
     ]
   },
   {
-    "id": "numeral-match-15-20",
+    "id": "numeral-count-16-20",
     "domain": "numeral",
-    "titleDa": "Match tal og antal 15-20",
+    "titleDa": "Tæl og find tallet 16-20",
     "cra": "abstract",
-    "prereqs": ["numeral-match-10-15", "count-15-20"],
+    "prereqs": ["numeral-count-11-15", "tens-ones-16-20"],
     "review": true,
     "templates": [
-      { "templateId": "numeral-match", "params": { "range": [15, 20], "choices": 3 } }
+      { "templateId": "numeral-match", "params": { "range": [16, 20], "choices": 3, "countAloud": true } }
     ]
   },
   {
@@ -236,11 +216,33 @@
   },
 
   {
+    "id": "add-gather-to-5",
+    "domain": "addsub",
+    "titleDa": "Saml og tæl: plus op til 5",
+    "cra": "concrete",
+    "prereqs": ["count-1-5", "numeral-match-1-5"],
+    "review": true,
+    "templates": [
+      { "templateId": "gather-sum", "params": { "maxSum": 5 } }
+    ]
+  },
+  {
+    "id": "add-gather-to-10",
+    "domain": "addsub",
+    "titleDa": "Saml og tæl: plus op til 10",
+    "cra": "concrete",
+    "prereqs": ["add-gather-to-5", "count-1-10"],
+    "review": true,
+    "templates": [
+      { "templateId": "gather-sum", "params": { "maxSum": 10 } }
+    ]
+  },
+  {
     "id": "add-combine-to-5",
     "domain": "addsub",
     "titleDa": "Læg sammen med blokke, op til 5",
-    "cra": "concrete",
-    "prereqs": ["count-1-5", "numeral-match-1-5"],
+    "cra": "representational",
+    "prereqs": ["add-gather-to-5"],
     "review": true,
     "templates": [
       { "templateId": "combine-count", "params": { "maxSum": 5 } }
@@ -250,11 +252,22 @@
     "id": "add-combine-to-10",
     "domain": "addsub",
     "titleDa": "Læg sammen med blokke, op til 10",
-    "cra": "concrete",
+    "cra": "representational",
     "prereqs": ["add-combine-to-5", "numeral-match-1-10"],
     "review": true,
     "templates": [
       { "templateId": "combine-count", "params": { "maxSum": 10 } }
+    ]
+  },
+  {
+    "id": "add-line-to-10",
+    "domain": "addsub",
+    "titleDa": "Hop plus på tallinjen",
+    "cra": "representational",
+    "prereqs": ["line-goto-1-10", "add-combine-to-5"],
+    "review": true,
+    "templates": [
+      { "templateId": "line-add", "params": { "lineMax": 10, "maxHops": 4 } }
     ]
   },
   {
@@ -316,7 +329,7 @@
     "id": "add-doubles-to-10",
     "domain": "addsub",
     "titleDa": "Dobbelt op: to ens bunker",
-    "cra": "concrete",
+    "cra": "representational",
     "prereqs": ["add-combine-to-5"],
     "review": true,
     "templates": [

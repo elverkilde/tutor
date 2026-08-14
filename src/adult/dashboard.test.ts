@@ -111,7 +111,7 @@ describe('buildSuggestions', () => {
       'compare-1-5': { ...windowOf([['incorrect', 0], ['demonstrated', 2], ['incorrect', 0], ['demonstrated', 2]]), skillId: 'compare-1-5' },
     }
     const suggestions = buildSuggestions(skills, mastery, null, now)
-    expect(suggestions.find((s) => s.kind === 'close')?.text).toContain('Tæl og hent 1-5')
+    expect(suggestions.find((s) => s.kind === 'close')?.text).toContain('Hent eller byg 1-5')
     expect(suggestions.find((s) => s.kind === 'support')?.text).toContain('Flest blokke 1-5')
     expect(suggestions.some((s) => s.kind === 'ready')).toBe(true) // untouched frontier skills exist
   })
