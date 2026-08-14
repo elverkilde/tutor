@@ -64,8 +64,12 @@ Import also works as *restore* — importing a bundle whose profile already exis
 
 Hold the faint gear (bottom-right of the start screen) for 2 seconds.
 
-- **Overview**: placement status, every skill's mastery state with its recent-attempt dots,
-  and per-session history (clean / with help / demonstrated counts).
+- **Overview**: suggested focus (placement status, close-to-mastery, needs-support, due-for-
+  review), every skill's mastery state with its recent-attempt dots, and per-session history.
+- **Skill map**: the whole curriculum as a graph — domain tracks left-to-right by difficulty,
+  colored by mastery. The green/blue boundary is his frontier.
+- **Trends**: first-try success per session (per domain + overall, 80% target line) and median
+  thinking time of correct answers.
 - **Settings**: rounds per session (5/10/15), which skill areas are active, calm mode
   (dampens all animation), and **Reset profile** — use this before the child's first real
   session if you've been testing on the same device, so he gets a fresh placement.
@@ -118,7 +122,7 @@ Content → Voices → Dansk.
 - ~~**M3**: full 30-skill curriculum, 6 new mechanics, curriculum-linked block unlocks.~~ Done.
 - ~~**M5**: profiles + export/import, offline PWA, GitHub Pages deploy.~~ Done (recorded Danish
   clips remain an option if enhanced TTS isn't good enough).
-- **M4**: full adult dashboard — skill map graph, accuracy trends, suggested next steps.
+- ~~**M4**: adult dashboard — skill map, per-session trends, suggested focus.~~ Done.
 - **M6** (from field observations): first-encounter ghost-hand demos, curriculum to 20 +
   missing-number equations + practical math (clock/money), reward world growth, shareable
   progress report for school meetings.
