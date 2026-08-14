@@ -19,12 +19,14 @@ export const PROBE_CAP = 24
 
 // Patterns early: often a relative strength for autistic children — early
 // wins during placement buy engagement for the harder domains after.
+// Magnitude right behind: perceptual comparison needs no counting, and at
+// its old back-of-queue spot the probe cap regularly starved it entirely.
 export const DOMAIN_ORDER: Domain[] = [
   'subitizing',
   'patterns',
+  'magnitude',
   'counting',
   'numeral',
-  'magnitude',
   'ordering',
   'addsub',
 ]

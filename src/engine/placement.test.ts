@@ -60,7 +60,9 @@ describe('placement on the real curriculum', () => {
 
   it('an ability-1 learner masters depth<=1 skills across the early domains', () => {
     const { placement } = runPlacement(skills, abilityLearner(1))
-    for (const id of ['subitize-1-3', 'subitize-compare-1-4', 'pattern-ab', 'count-1-5']) {
+    // compare-1-5 is the breadth canary: with magnitude at the back of the
+    // queue the probe cap starved it, so comparison never got assessed.
+    for (const id of ['subitize-1-3', 'subitize-compare-1-4', 'pattern-ab', 'compare-1-5', 'count-1-5']) {
       expect(placement.provisionalMastered).toContain(id)
     }
     for (const id of placement.provisionalMastered) {

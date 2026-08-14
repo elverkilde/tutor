@@ -9,8 +9,11 @@ import { isMastered } from './mastery'
  * yet mastered — the zone the child can grow in), ~20% review of mastered
  * skills (retention matters more for this learner profile than for typical
  * kids). Within the frontier, skills with the fewest attempts come first so
- * new material gets introduced steadily. Avoids repeating the template of
- * the immediately preceding trial when an alternative exists.
+ * new material gets introduced steadily. Avoids repeating the previous
+ * trial's skill, domain and template when alternatives exist — without the
+ * domain rule, picks race depth-first: every mastery unlocks a fresh
+ * 0-attempt child that wins the fewest-attempts filter, so one strong chain
+ * monopolizes the session.
  */
 export function selectNext(
   skills: Skill[],
@@ -42,9 +45,13 @@ export function selectNext(
     return null // nothing available (all domains disabled)
   }
 
-  // Variety: don't serve the same skill back-to-back when there's a choice.
+  // Variety: don't serve the same skill back-to-back when there's a choice,
+  // and prefer a change of domain so sessions interleave instead of tunnel.
   const lastSkill = recent.length > 0 ? recent[recent.length - 1].skillId : null
-  const varied = pool.filter((s) => s.id !== lastSkill)
+  const lastDomain = lastSkill ? (enabled.find((s) => s.id === lastSkill)?.domain ?? null) : null
+  let varied = pool.filter((s) => s.id !== lastSkill)
+  const domainVaried = varied.filter((s) => s.domain !== lastDomain)
+  if (domainVaried.length > 0) varied = domainVaried
   const skill = rng.pick(varied.length > 0 ? varied : pool)
   const lastTemplate = recent.length > 0 ? recent[recent.length - 1].templateId : null
   const alternatives = skill.templates.filter((t) => t.templateId !== lastTemplate)

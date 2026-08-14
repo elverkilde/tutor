@@ -73,6 +73,23 @@ describe('selectNext', () => {
     }
   })
 
+  it('prefers switching domain from the previous trial when the pool allows', () => {
+    const rng = mulberry32(21)
+    // Last trial was 'root' (counting). kid-a (counting) and kid-b (magnitude)
+    // are both frontier — the domain rule must always favor kid-b, so the
+    // only counting picks left are 'root' reviews.
+    for (let i = 0; i < 300; i++) {
+      const pick = selectNext(
+        world,
+        worldMastery,
+        settings,
+        [{ templateId: 'drag-to-chest', skillId: 'root' }],
+        rng,
+      )!
+      expect(pick.skillId).not.toBe('kid-a')
+    }
+  })
+
   it('avoids repeating the previous skill when the pool has alternatives', () => {
     const rng = mulberry32(13)
     for (let i = 0; i < 200; i++) {
