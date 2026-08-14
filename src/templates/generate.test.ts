@@ -7,7 +7,7 @@ import { numeralMatch } from './numeral-match'
 import { towerBuild } from './tower-build'
 import { tensAndOnes } from './tens-and-ones'
 import { numberLineHop } from './number-line-hop'
-import { lineAdd } from './line-add'
+import { lineAdd, lineSub } from './line-add'
 import { gatherSum } from './gather-sum'
 import { patternContinue } from './pattern-continue'
 import { combineCount } from './combine-count'
@@ -218,6 +218,26 @@ describe('line-add generation', () => {
     expect(scaffolded.data.showPath).toBe(true)
     expect(scaffolded.data.start).toBe(spec.data.start)
     expect(scaffolded.data.hops).toBe(spec.data.hops)
+  })
+
+  it('counting back: the landing never leaves the line and never hits zero', () => {
+    for (const b of bindingsFor('line-sub')) {
+      const lineMax = b.params['lineMax'] as number
+      const maxHops = b.params['maxHops'] as number
+      for (let seed = 1; seed <= SEEDS; seed++) {
+        const spec = lineSub.generateTrial(b.skill.id, b.params, seed)
+        const { line, start, hops, answer } = spec.data
+        expect(hops).toBeGreaterThanOrEqual(1)
+        expect(hops).toBeLessThanOrEqual(maxHops)
+        expect(answer).toBe(start - hops)
+        expect(answer).toBeGreaterThanOrEqual(1)
+        expect(start).toBeLessThanOrEqual(lineMax)
+        expect(line).toContain(answer)
+        expect(spec.promptPhrase.key).toBe('lineSub')
+        expect(spec.promptPhrase.n).toBe(start)
+        expect(spec.promptPhrase.n2).toBe(hops)
+      }
+    }
   })
 })
 

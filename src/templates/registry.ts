@@ -6,7 +6,7 @@ import { numeralMatch } from './numeral-match'
 import { towerBuild } from './tower-build'
 import { tensAndOnes } from './tens-and-ones'
 import { numberLineHop } from './number-line-hop'
-import { lineAdd } from './line-add'
+import { lineAdd, lineSub } from './line-add'
 import { gatherSum } from './gather-sum'
 import { patternContinue } from './pattern-continue'
 import { combineCount } from './combine-count'
@@ -21,6 +21,7 @@ export const templates: Record<string, TaskTemplate<any>> = {
   'tens-and-ones': tensAndOnes,
   'number-line-hop': numberLineHop,
   'line-add': lineAdd,
+  'line-sub': lineSub,
   'gather-sum': gatherSum,
   'pattern-continue': patternContinue,
   'combine-count': combineCount,

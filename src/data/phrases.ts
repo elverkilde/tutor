@@ -56,6 +56,8 @@ export const phrases = {
   // "gange" (times), not "hop": "hop tre hop" reads as a rule he can't parse.
   lineAdd: (n = 0, n2 = 0) =>
     `Du står på ${daNumber(n)}. Hop ${n2 === 1 ? 'en gang' : `${daNumber(n2)} gange`} frem`,
+  lineSub: (n = 0, n2 = 0) =>
+    `Du står på ${daNumber(n)}. Hop ${n2 === 1 ? 'en gang' : `${daNumber(n2)} gange`} tilbage`,
   takeAway: (n = 0, n2 = 0) =>
     `Der er ${blokke(n)}. ${daNumber(n2)} hopper væk. Hvor mange er der tilbage?`,
   plusEquation: (n = 0, n2 = 0) => `Hvor meget er ${daNumber(n)} plus ${daNumber(n2)}?`,

@@ -84,7 +84,7 @@ unscaffolded attempt.
 
 ## The curriculum
 
-36 skills across 7 domains, each taught concrete → representational → abstract:
+37 skills across 7 domains, each taught concrete → representational → abstract:
 
 - **Subitizing**: instant amounts 1-3, quick comparison 1-4
 - **Counting**: produce a quantity (1-5, 5-10) — chest-fetch and tower-build are two mechanics
@@ -96,12 +96,13 @@ unscaffolded attempt.
 - **Ordering**: find numbers on the number line (1-5, 1-10), the number just after / just before
 - **Addition & subtraction**: taught as an *action* first — gather two trays into the chest
   and count the union (concrete); then combine piles → total (picture, + sign appears);
-  hop forward on the number line (counting on — taps are the hops); blocks hop away → how
-  many left; then bare equations (+ to 5, + to 10, − to 10, missing number)
+  hop forward or backward on the number line (counting on / counting back — taps are the
+  hops); blocks hop away → how many left; then bare equations (+ to 5, + to 10, − to 10,
+  missing number)
 - **Patterns**: AB, ABC, AABB, mixed — a root skill on purpose (often a relative
   strength, gives early wins)
 
-Twelve mini-game mechanics serve these skills; new block types (sand, leaves, brick, ice,
+Thirteen mini-game mechanics serve these skills; new block types (sand, leaves, brick, ice,
 snow, emerald, obsidian, redstone) unlock as skills are mastered, so the reward world
 itself tracks his learning.
 

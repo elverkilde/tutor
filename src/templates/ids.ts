@@ -10,6 +10,7 @@ export const TEMPLATE_IDS = [
   'tens-and-ones',
   'number-line-hop',
   'line-add',
+  'line-sub',
   'pattern-continue',
   'combine-count',
   'gather-sum',

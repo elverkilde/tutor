@@ -271,6 +271,17 @@
     ]
   },
   {
+    "id": "sub-line-to-10",
+    "domain": "addsub",
+    "titleDa": "Hop minus på tallinjen",
+    "cra": "representational",
+    "prereqs": ["add-line-to-10", "sub-take-to-5"],
+    "review": true,
+    "templates": [
+      { "templateId": "line-sub", "params": { "lineMax": 10, "maxHops": 4 } }
+    ]
+  },
+  {
     "id": "sub-take-to-5",
     "domain": "addsub",
     "titleDa": "Træk fra med blokke, op til 5",
