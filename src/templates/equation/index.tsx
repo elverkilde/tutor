@@ -7,11 +7,16 @@ import { sleep } from '../../ui/async'
 import { digitChoicesAround } from '../combine-count'
 import type { TaskTemplate, TemplateProps, TrialSpec } from '../types'
 
-/** Abstract arithmetic: bare symbols. The scaffold falls back to piles (CRA). */
+/**
+ * Abstract arithmetic: bare symbols. The scaffold falls back to piles (CRA).
+ * missing mode shows "a + ? = b" and asks for the blank.
+ */
 export interface EquationData {
   a: number
   b: number
   op: 'plus' | 'minus'
+  /** the blank is the middle operand: a + ? = b */
+  missing: boolean
   answer: number
   choices: number[]
   blockType: string
@@ -22,9 +27,15 @@ export interface EquationData {
 function generateTrial(skillId: string, params: TemplateParams, seed: number): TrialSpec<EquationData> {
   const rng = mulberry32(seed)
   const op = (params['op'] as 'plus' | 'minus') ?? 'plus'
+  const missing = params['missing'] === true
   const max = typeof params['max'] === 'number' ? params['max'] : 5
   let a: number, b: number, answer: number
-  if (op === 'plus') {
+  if (missing) {
+    // a + answer = b
+    answer = rng.int(1, max - 1)
+    a = rng.int(1, max - answer)
+    b = a + answer
+  } else if (op === 'plus') {
     a = rng.int(1, max - 1)
     b = rng.int(1, max - a)
     answer = a + b
@@ -38,11 +49,14 @@ function generateTrial(skillId: string, params: TemplateParams, seed: number): T
     skillId,
     params,
     seed,
-    promptPhrase: { key: op === 'plus' ? 'plusEquation' : 'minusEquation', n: a, n2: b },
+    promptPhrase: missing
+      ? { key: 'missingPlus', n: a, n2: b }
+      : { key: op === 'plus' ? 'plusEquation' : 'minusEquation', n: a, n2: b },
     data: {
       a,
       b,
       op,
+      missing,
       answer,
       choices: digitChoicesAround(answer, 3, Math.max(10, max), rng),
       blockType: rng.pick(['grass', 'stone', 'wood']),
@@ -58,7 +72,7 @@ function applyScaffold(spec: TrialSpec<EquationData>, level: 0 | 1 | 2): TrialSp
 }
 
 function View({ spec, scaffoldLevel, speak, onResponse, onDemoFinished }: TemplateProps<EquationData>) {
-  const { a, b, op, answer, choices, blockType, showPiles } = spec.data
+  const { a, b, op, missing, answer, choices, blockType, showPiles } = spec.data
   const [picked, setPicked] = useState<number | null>(null)
   const [demoDigit, setDemoDigit] = useState<number | null>(null)
   const alive = useRef(true)
@@ -69,7 +83,11 @@ function View({ spec, scaffoldLevel, speak, onResponse, onDemoFinished }: Templa
     if (!demoing) return
     ;(async () => {
       await speak({ key: 'watchMe' })
-      await speak({ key: op === 'plus' ? 'plusEquation' : 'minusEquation', n: a, n2: b })
+      await speak(
+        missing
+          ? { key: 'missingPlus', n: a, n2: b }
+          : { key: op === 'plus' ? 'plusEquation' : 'minusEquation', n: a, n2: b },
+      )
       if (!alive.current) return
       setDemoDigit(answer)
       await speak({ key: 'number', n: answer })
@@ -99,6 +117,7 @@ function View({ spec, scaffoldLevel, speak, onResponse, onDemoFinished }: Templa
         data-a={a}
         data-b={b}
         data-op={op}
+        data-missing={missing ? 'yes' : 'no'}
         style={{
           display: 'flex',
           gap: '28px',
@@ -114,9 +133,28 @@ function View({ spec, scaffoldLevel, speak, onResponse, onDemoFinished }: Templa
         <span style={{ fontSize: '4rem', fontWeight: 800, color: 'var(--ink-soft)' }}>
           {op === 'plus' ? '+' : '−'}
         </span>
-        {operand(b, b)}
+        {missing ? (
+          <span
+            style={{
+              fontSize: '4.4rem',
+              fontWeight: 800,
+              color: demoDigit !== null ? 'var(--good)' : 'var(--ink-soft)',
+              minWidth: '80px',
+              textAlign: 'center',
+              borderBottom: '5px dashed var(--ink-soft)',
+            }}
+          >
+            {demoDigit ?? '?'}
+          </span>
+        ) : (
+          operand(b, b)
+        )}
         <span style={{ fontSize: '4rem', fontWeight: 800, color: 'var(--ink-soft)' }}>=</span>
-        <span style={{ fontSize: '4.4rem', fontWeight: 800, color: 'var(--ink-soft)' }}>?</span>
+        {missing ? (
+          operand(b, b)
+        ) : (
+          <span style={{ fontSize: '4.4rem', fontWeight: 800, color: 'var(--ink-soft)' }}>?</span>
+        )}
       </div>
       <DigitChoices choices={choices} onPick={pick} demoDigit={demoDigit} disabled={demoing || picked !== null} />
     </div>

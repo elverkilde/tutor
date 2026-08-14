@@ -193,20 +193,36 @@ describe('addsub generation', () => {
     }
   })
 
-  it('equation results stay within bounds for both operators', () => {
+  it('equation results stay within bounds for both operators and missing mode', () => {
     for (const b of bindingsFor('equation')) {
       const max = b.params['max'] as number
       const op = b.params['op'] as string
+      const missing = b.params['missing'] === true
       for (let seed = 1; seed <= SEEDS; seed++) {
         const spec = equation.generateTrial(b.skill.id, b.params, seed)
         const { a, b: bb, answer, choices } = spec.data
-        expect(op === 'plus' ? a + bb : a - bb).toBe(answer)
-        expect(answer).toBeGreaterThanOrEqual(op === 'plus' ? 2 : 1)
-        expect(answer).toBeLessThanOrEqual(max)
+        if (missing) {
+          expect(a + answer).toBe(bb) // a + ? = b
+          expect(bb).toBeLessThanOrEqual(max)
+          expect(answer).toBeGreaterThanOrEqual(1)
+        } else {
+          expect(op === 'plus' ? a + bb : a - bb).toBe(answer)
+          expect(answer).toBeGreaterThanOrEqual(op === 'plus' ? 2 : 1)
+          expect(answer).toBeLessThanOrEqual(max)
+        }
         expect(choices).toContain(answer)
         const scaffolded = equation.applyScaffold(spec, 1)
         expect(scaffolded.data.showPiles).toBe(true)
       }
+    }
+  })
+
+  it('doubles mode produces two equal piles', () => {
+    const b = bindingsFor('combine-count').find((x) => x.params['doubles'] === true)!
+    for (let seed = 1; seed <= SEEDS; seed++) {
+      const spec = combineCount.generateTrial(b.skill.id, b.params, seed)
+      expect(spec.data.a).toBe(spec.data.b)
+      expect(spec.data.answer).toBeLessThanOrEqual(b.params['maxSum'] as number)
     }
   })
 })

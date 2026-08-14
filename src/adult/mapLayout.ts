@@ -12,9 +12,9 @@ import type { MasteryState, MasteryStatus, Skill } from '../engine/types'
 export const NODE_W = 132
 export const NODE_H = 54
 export const COL_W = 158
-export const ROW_H = 148
 const PAD = 16
 const STACK_GAP = 10
+const ROW_GAP = 40
 
 export interface MapNode {
   id: string
@@ -48,24 +48,29 @@ export function layoutSkillMap(
   const pos = new Map<string, { x: number; y: number }>()
   const nodes: MapNode[] = []
   let maxDepth = 0
+  let rowY = PAD
 
-  for (const [row, domain] of domains.entries()) {
-    // Group this domain's skills by depth so same-depth skills stack.
+  for (const domain of domains) {
+    // Group this domain's skills by depth so same-depth skills stack; the
+    // row is as tall as its tallest stack.
     const stacks = new Map<number, Skill[]>()
     for (const s of skills.filter((k) => k.domain === domain)) {
       const d = skillDepth(s, byId)
       maxDepth = Math.max(maxDepth, d)
       stacks.set(d, [...(stacks.get(d) ?? []), s])
     }
+    let maxStack = 1
     for (const [depth, group] of stacks) {
+      maxStack = Math.max(maxStack, group.length)
       group.sort((a, b) => a.id.localeCompare(b.id))
       for (const [i, s] of group.entries()) {
         const x = PAD + depth * COL_W
-        const y = PAD + row * ROW_H + i * (NODE_H + STACK_GAP)
+        const y = rowY + i * (NODE_H + STACK_GAP)
         pos.set(s.id, { x, y })
         nodes.push({ id: s.id, title: s.titleDa, status: deriveStatus(s, mastery), x, y })
       }
     }
+    rowY += maxStack * (NODE_H + STACK_GAP) - STACK_GAP + ROW_GAP
   }
 
   const edges: MapEdge[] = []
@@ -86,6 +91,6 @@ export function layoutSkillMap(
     nodes,
     edges,
     width: PAD * 2 + (maxDepth + 1) * COL_W,
-    height: PAD * 2 + domains.length * ROW_H,
+    height: rowY - ROW_GAP + PAD,
   }
 }

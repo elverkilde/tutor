@@ -1,5 +1,6 @@
-import { useRef, useState } from 'preact/hooks'
+import { useEffect, useRef, useState } from 'preact/hooks'
 import { BLOCKS, blockById } from '../data/blocks'
+import { worldSizeFor } from '../engine/world'
 import { audio, profile, updateProfile } from '../state/store'
 import { sfx } from '../audio/sfx'
 import { Block } from './Block'
@@ -19,6 +20,23 @@ export function RewardWorldScreen({ onDone }: { onDone: () => void }) {
   const [drag, setDrag] = useState<{ x: number; y: number; fromX: number; fromY: number; block: string } | null>(null)
   const press = useRef<{ x: number; y: number; x0: number; y0: number; moved: boolean; block: string } | null>(null)
   const gridRef = useRef<HTMLDivElement>(null)
+
+  // Learning grows the world: check for expansion on entering build time.
+  useEffect(() => {
+    const masteredCount = Object.values(p.mastery).filter((m) => m.masteredAt).length
+    const size = worldSizeFor(masteredCount)
+    if (size.cols > p.world.cols || size.rows > p.world.rows) {
+      updateProfile((prof) => ({
+        ...prof,
+        world: {
+          ...prof.world,
+          cols: Math.max(prof.world.cols, size.cols),
+          rows: Math.max(prof.world.rows, size.rows),
+        },
+      }))
+      void audio.speak({ key: 'worldBigger' })
+    }
+  }, [])
 
   const cellMap = new Map(p.world.cells.map((c) => [`${c.x},${c.y}`, c.block]))
 

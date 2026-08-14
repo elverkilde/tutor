@@ -29,8 +29,10 @@ export function digitChoicesAround(answer: number, count: number, max: number, r
 function generateTrial(skillId: string, params: TemplateParams, seed: number): TrialSpec<CombineCountData> {
   const rng = mulberry32(seed)
   const maxSum = typeof params['maxSum'] === 'number' ? params['maxSum'] : 5
-  const a = rng.int(1, maxSum - 1)
-  const b = rng.int(1, maxSum - a)
+  // doubles: two equal piles — the foundation for halving/doubling fluency
+  const doubles = params['doubles'] === true
+  const a = doubles ? rng.int(1, Math.floor(maxSum / 2)) : rng.int(1, maxSum - 1)
+  const b = doubles ? a : rng.int(1, maxSum - a)
   const [typeA, typeB] = rng.shuffle(['grass', 'stone', 'wood', 'gold']).slice(0, 2)
   const answer = a + b
   return {

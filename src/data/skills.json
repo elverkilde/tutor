@@ -77,6 +77,17 @@
       { "templateId": "drag-to-chest", "params": { "range": [10, 15] } }
     ]
   },
+  {
+    "id": "count-15-20",
+    "domain": "counting",
+    "titleDa": "Tæl og hent 15-20 blokke",
+    "cra": "concrete",
+    "prereqs": ["count-10-15"],
+    "review": true,
+    "templates": [
+      { "templateId": "drag-to-chest", "params": { "range": [15, 20] } }
+    ]
+  },
 
   {
     "id": "numeral-match-1-5",
@@ -109,6 +120,17 @@
     "review": true,
     "templates": [
       { "templateId": "numeral-match", "params": { "range": [10, 15], "choices": 3 } }
+    ]
+  },
+  {
+    "id": "numeral-match-15-20",
+    "domain": "numeral",
+    "titleDa": "Match tal og antal 15-20",
+    "cra": "abstract",
+    "prereqs": ["numeral-match-10-15", "count-15-20"],
+    "review": true,
+    "templates": [
+      { "templateId": "numeral-match", "params": { "range": [15, 20], "choices": 3 } }
     ]
   },
   {
@@ -288,6 +310,39 @@
     "review": true,
     "templates": [
       { "templateId": "equation", "params": { "op": "minus", "max": 10 } }
+    ]
+  },
+  {
+    "id": "add-doubles-to-10",
+    "domain": "addsub",
+    "titleDa": "Dobbelt op: to ens bunker",
+    "cra": "concrete",
+    "prereqs": ["add-combine-to-5"],
+    "review": true,
+    "templates": [
+      { "templateId": "combine-count", "params": { "maxSum": 10, "doubles": true } }
+    ]
+  },
+  {
+    "id": "add-missing-to-5",
+    "domain": "addsub",
+    "titleDa": "Hvad mangler? Plus op til 5",
+    "cra": "abstract",
+    "prereqs": ["add-equation-to-5"],
+    "review": true,
+    "templates": [
+      { "templateId": "equation", "params": { "op": "plus", "max": 5, "missing": true } }
+    ]
+  },
+  {
+    "id": "add-missing-to-10",
+    "domain": "addsub",
+    "titleDa": "Hvad mangler? Plus op til 10",
+    "cra": "abstract",
+    "prereqs": ["add-missing-to-5", "add-equation-to-10"],
+    "review": true,
+    "templates": [
+      { "templateId": "equation", "params": { "op": "plus", "max": 10, "missing": true } }
     ]
   },
 

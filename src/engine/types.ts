@@ -98,6 +98,8 @@ export interface Profile {
   mastery: Record<string, MasteryState>
   /** Active during the first sessions; null once placement finished. Older profiles: undefined = no placement. */
   placement?: PlacementState | null
+  /** Mechanics the child has met — first encounter of a template plays a demonstration round. */
+  seenTemplates?: string[]
   inventory: Record<string, number> // blockType -> count
   world: RewardWorld
 }

@@ -1,5 +1,6 @@
 import { useState } from 'preact/hooks'
 import { Overview } from './Overview'
+import { Report } from './Report'
 import { Settings } from './Settings'
 import { SkillMap } from './SkillMap'
 import { Trends } from './Trends'
@@ -8,6 +9,7 @@ const TABS = [
   ['overview', 'Overview'],
   ['map', 'Skill map'],
   ['trends', 'Trends'],
+  ['report', 'Report'],
   ['settings', 'Settings'],
 ] as const
 type Tab = (typeof TABS)[number][0]
@@ -26,6 +28,7 @@ export function AdultScreen({ onClose }: { onClose: () => void }) {
       }}
     >
       <div
+        class="no-print"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -62,6 +65,7 @@ export function AdultScreen({ onClose }: { onClose: () => void }) {
         {tab === 'overview' && <Overview />}
         {tab === 'map' && <SkillMap />}
         {tab === 'trends' && <Trends />}
+        {tab === 'report' && <Report />}
         {tab === 'settings' && <Settings onProfileReset={onClose} />}
       </div>
     </div>

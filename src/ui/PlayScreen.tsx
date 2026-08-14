@@ -35,6 +35,8 @@ export function PlayScreen({ onDone }: { onDone: () => void }) {
   const [round, setRound] = useState(0)
   const [item, setItem] = useState<ActiveItem | null>(null)
   const [attempt, setAttempt] = useState<ScaffoldLevel>(0)
+  /** First time this profile meets a mechanic: play one demonstration round first. */
+  const [intro, setIntro] = useState(false)
   const [overlay, setOverlay] = useState<BlockType | null>(null)
   const recentRef = useRef<{ templateId: string; skillId: string }[]>([])
   const presentedAt = useRef(0)
@@ -62,8 +64,11 @@ export function PlayScreen({ onDone }: { onDone: () => void }) {
     const spec = templates[pick.templateId].generateTrial(pick.skillId, pick.params, seed)
     setItem({ pick, spec, mode })
     setAttempt(0)
+    const unseen = !(p.seenTemplates ?? []).includes(pick.templateId)
+    setIntro(unseen)
     presentedAt.current = performance.now()
-    void audio.speak(spec.promptPhrase)
+    // An intro demo narrates itself; the prompt gets spoken on the real trial.
+    if (!unseen) void audio.speak(spec.promptPhrase)
   }, [round])
 
   const logTrial = (outcome: 'correct' | 'incorrect' | 'demonstrated', level: ScaffoldLevel) => {
@@ -145,6 +150,26 @@ export function PlayScreen({ onDone }: { onDone: () => void }) {
   }
 
   const handleDemoFinished = () => {
+    if (intro && item) {
+      // The intro was instruction, not assessment: nothing is logged. Mark
+      // the mechanic as met and present the real trial with fresh numbers.
+      updateProfile((p) => ({
+        ...p,
+        seenTemplates: [...(p.seenTemplates ?? []), item.pick.templateId],
+      }))
+      const seed = rng.int(1, 2 ** 30)
+      const spec = templates[item.pick.templateId].generateTrial(
+        item.pick.skillId,
+        item.pick.params,
+        seed,
+      )
+      setItem({ ...item, spec })
+      setIntro(false)
+      setAttempt(0)
+      presentedAt.current = performance.now()
+      void audio.speak(spec.promptPhrase)
+      return
+    }
     logTrial('demonstrated', 2)
     advance()
   }
@@ -152,7 +177,8 @@ export function PlayScreen({ onDone }: { onDone: () => void }) {
   if (!item) return null
 
   const template = templates[item.pick.templateId]
-  const displaySpec = template.applyScaffold(item.spec, attempt)
+  const level: ScaffoldLevel = intro ? 2 : attempt
+  const displaySpec = template.applyScaffold(item.spec, level)
   const TemplateView = template.View
 
   return (
@@ -163,9 +189,9 @@ export function PlayScreen({ onDone }: { onDone: () => void }) {
         doneRounds={round}
       >
         <TemplateView
-          key={`${round}-${attempt}`}
+          key={`${round}-${attempt}-${intro ? 'intro' : 'real'}`}
           spec={displaySpec}
-          scaffoldLevel={attempt}
+          scaffoldLevel={level}
           stimulation={settings.stimulation}
           speak={(ref) => audio.speak(ref)}
           onResponse={handleResponse}

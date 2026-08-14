@@ -47,6 +47,23 @@ button {
   touch-action: none; /* required for pointer-event drags on touch */
 }
 
+@media print {
+  html,
+  body {
+    position: static;
+    overflow: visible;
+    background: white;
+  }
+  #app,
+  #app > div {
+    height: auto;
+    overflow: visible;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
+
 @keyframes pop-in {
   0% {
     transform: scale(0.4);
