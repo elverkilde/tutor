@@ -96,10 +96,29 @@ Nine mini-game mechanics serve these skills; new block types (sand, leaves, bric
 snow, emerald, obsidian, redstone) unlock as skills are mastered, so the reward world
 itself tracks his learning.
 
+## Deployment (PWA)
+
+The app is an offline-capable PWA. Deploys to GitHub Pages via `.github/workflows/deploy.yml`
+on every push to `main` (build is relative-base, so it works at any URL).
+
+**Install on the iPad** (one-time, needs the Pages URL over HTTPS):
+1. Open `https://elverkilde.github.io/tutor/` in Safari.
+2. Share button → *Add to Home Screen* ("Føj til hjemmeskærm").
+3. Launch from the icon: fullscreen, no browser chrome, works offline from then on.
+   Updates arrive automatically next time it's opened with network.
+
+Note: the home-screen install has its own storage — it starts fresh (new profile + placement),
+separate from the Safari-tab/LAN data. Use adult-area export/import to carry a profile over.
+TTS quality: download the *enhanced* Danish voice under Settings → Accessibility → Spoken
+Content → Voices → Dansk.
+
 ## Roadmap
 
 - ~~**M2**: placement mode, adult gate + settings, first dashboard.~~ Done.
 - ~~**M3**: full 30-skill curriculum, 6 new mechanics, curriculum-linked block unlocks.~~ Done.
+- ~~**M5**: profiles + export/import, offline PWA, GitHub Pages deploy.~~ Done (recorded Danish
+  clips remain an option if enhanced TTS isn't good enough).
 - **M4**: full adult dashboard — skill map graph, accuracy trends, suggested next steps.
-- **M5**: PWA offline install, JSON export/import of profile + trial log, GitHub Pages deploy,
-  pre-recorded Danish clips if TTS quality is unacceptable.
+- **M6** (from field observations): first-encounter ghost-hand demos, curriculum to 20 +
+  missing-number equations + practical math (clock/money), reward world growth, shareable
+  progress report for school meetings.
